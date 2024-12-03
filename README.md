@@ -1,4 +1,4 @@
-# asset_copy_example
+# swiss_test_app  example
 
 Demonstrates how to use the asset_copy plugin.
 
