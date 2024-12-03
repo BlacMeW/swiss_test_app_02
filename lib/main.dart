@@ -109,6 +109,7 @@ class _MyAppState extends State<MyApp> {
     _addText(
         children, 'Moon position on 2024-12-2 02:52:00 UTC: $moonPosition');
 
+    _addText(children, "Copy status: ${_statusMessage}");
 
     return Column(children: children);
   }
@@ -118,7 +119,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          title: const Text('Swiss Test App example'),
         ),
         body: Center(
           child: _getContent(context),
