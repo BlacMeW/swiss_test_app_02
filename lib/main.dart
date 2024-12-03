@@ -31,6 +31,7 @@ class _MyAppState extends State<MyApp> {
   String swephVersion='';
   // String swephVersion = Sweph.swe_version();
   String moonPosition = '';
+  late HouseCuspData houseSystemAscmc;
 
   @override
   void initState() {
@@ -86,6 +87,22 @@ class _MyAppState extends State<MyApp> {
     return 'lat=${pos.latitude.toStringAsFixed(3)} lon=${pos.longitude.toStringAsFixed(3)}';
   }
 
+  static HouseCuspData getHouseSystemAscmc() {
+    const year = 1947;
+    const month = 8;
+    const day = 15;
+    const hour = 16 + (0.0 / 60.0) - 5.5;
+
+    const longitude = 81 + 50 / 60.0;
+    const latitude = 25 + 57 / 60.0;
+    final julday =
+    Sweph.swe_julday(year, month, day, hour, CalendarType.SE_GREG_CAL);
+
+    Sweph.swe_set_sid_mode(SiderealMode.SE_SIDM_LAHIRI,
+        SiderealModeFlag.SE_SIDBIT_NONE, 0.0 /* t0 */, 0.0 /* ayan_t0 */);
+    return Sweph.swe_houses(julday, latitude, longitude, Hsys.P);
+  }
+
   void _addText(List<Widget> children, String text) {
     const textStyle = TextStyle(fontSize: 25);
     const spacerSmall = SizedBox(height: 10);
@@ -101,7 +118,7 @@ class _MyAppState extends State<MyApp> {
   Widget _getContent(BuildContext context) {
     List<Widget> children = [
       const Text(
-        'Swiss Ephemeris Exmaple',
+        'Swiss Ephemeris Example',
         style: TextStyle(fontSize: 30),
         textAlign: TextAlign.center,
       ),
@@ -113,10 +130,13 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       swephVersion = Sweph.swe_version();
       moonPosition = getMoonPosition();
+      houseSystemAscmc = getHouseSystemAscmc();
     });
     _addText(children, 'Sweph Version: $swephVersion');
     _addText(
         children, 'Moon position on 2024-12-2 02:52:00 UTC: $moonPosition');
+    _addText(children,
+        'House System ASCMC[0] for custom time: ${houseSystemAscmc.ascmc[0]}');
 
     _addText(children, "Copy status: ${_statusMessage}");
 
