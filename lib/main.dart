@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sweph/sweph.dart';
 
-import 'io_helper.dart';
+// import 'io_helper.dart';
+import 'web_helper.dart' if (dart.library.ffi) 'io_helper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +29,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _statusMessage = 'Copying asset...';
-  String swephVersion='';
+  String swephVersion = '';
   // String swephVersion = Sweph.swe_version();
   String moonPosition = '';
   late HouseCuspData houseSystemAscmc;
@@ -36,12 +37,15 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    copyAssetToLocal();
+    if (kIsWeb == false) {
+      copyAssetToLocal();
+    }
+
+    //
     initS();
 
     // await initSweph([
     //   'sepl_18.se1', // For house calc
-    //   //   'ephe/sefstars.txt', // For star position
     //   //   'ephe/seasnam.txt', // For asteriods
     // ]);
   }
@@ -55,7 +59,6 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       swephVersion = Sweph.swe_version();
     });
-
   }
 
   Future<void> copyAssetToLocal() async {
@@ -77,13 +80,11 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-
-
   static String getMoonPosition() {
     final jd =
-    Sweph.swe_julday(2024, 12, 2, (2 + 52 / 60), CalendarType.SE_GREG_CAL);
+        Sweph.swe_julday(2024, 12, 2, (2 + 52 / 60), CalendarType.SE_GREG_CAL);
     final pos =
-    Sweph.swe_calc_ut(jd, HeavenlyBody.SE_MOON, SwephFlag.SEFLG_SWIEPH);
+        Sweph.swe_calc_ut(jd, HeavenlyBody.SE_MOON, SwephFlag.SEFLG_SWIEPH);
     return 'lat=${pos.latitude.toStringAsFixed(3)} lon=${pos.longitude.toStringAsFixed(3)}';
   }
 
@@ -96,7 +97,7 @@ class _MyAppState extends State<MyApp> {
     const longitude = 81 + 50 / 60.0;
     const latitude = 25 + 57 / 60.0;
     final julday =
-    Sweph.swe_julday(year, month, day, hour, CalendarType.SE_GREG_CAL);
+        Sweph.swe_julday(year, month, day, hour, CalendarType.SE_GREG_CAL);
 
     Sweph.swe_set_sid_mode(SiderealMode.SE_SIDM_LAHIRI,
         SiderealModeFlag.SE_SIDBIT_NONE, 0.0 /* t0 */, 0.0 /* ayan_t0 */);
