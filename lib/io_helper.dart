@@ -10,10 +10,13 @@ class _RootBundleAssetLoader implements AssetLoader {
 }
 
 Future<void> initSweph([List<String> epheAssets = const []]) async {
-  final epheFilesPath =
-      '${(await getApplicationSupportDirectory()).path}/ephe_files';
+  // final epheFilesPath =
+  //     '${(await getApplicationSupportDirectory()).path}/ephe_files';
 
-  // final epheFilesPath = '${(ephe_files)}';
+  final epheFilesPath = '${ (await getApplicationDocumentsDirectory()).path}';
+
+
+  // const epheFilesPath = '/app_flutter/flutter_assets/';
   await Sweph.init(
     epheAssets: epheAssets,
     epheFilesPath: epheFilesPath,
