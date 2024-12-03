@@ -28,8 +28,9 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _statusMessage = 'Copying asset...';
-  String swephVersion = Sweph.swe_version();
-  String moonPosition = getMoonPosition();
+  String swephVersion='';
+  // String swephVersion = Sweph.swe_version();
+  String moonPosition = '';
 
   @override
   void initState() {
@@ -50,12 +51,16 @@ class _MyAppState extends State<MyApp> {
       //   'ephe/sefstars.txt', // For star position
       //   'ephe/seasnam.txt', // For asteriods
     ]);
+    setState(() {
+      swephVersion = Sweph.swe_version();
+    });
+
   }
 
   Future<void> copyAssetToLocal() async {
     String status;
     try {
-      const assetName = 'ephe/sepl_18.se1';
+      const assetName = 'sepl_18.se1';
       const targetPath = 'sepl_18.se1';
 
       await AssetCopy.copyAssetToLocalStorage(assetName, targetPath);
@@ -105,6 +110,10 @@ class _MyAppState extends State<MyApp> {
 
     _addText(children,
         'Time taken to load Sweph: ${widget.timeToLoad.inMilliseconds} ms');
+    setState(() {
+      swephVersion = Sweph.swe_version();
+      moonPosition = getMoonPosition();
+    });
     _addText(children, 'Sweph Version: $swephVersion');
     _addText(
         children, 'Moon position on 2024-12-2 02:52:00 UTC: $moonPosition');
